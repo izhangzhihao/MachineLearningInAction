@@ -1,3 +1,5 @@
 *.pyc
 *.out
 .venv
+.ipynb_checkpoints
+data
