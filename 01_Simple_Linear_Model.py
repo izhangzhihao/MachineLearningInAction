@@ -1,20 +1,23 @@
+from typing import Tuple
 import tensorflow as tf
 import numpy as np
+from tensorflow import Variable
+from tensorflow.contrib.learn.python.learn.datasets.base import Datasets
 from tensorflow.examples.tutorials.mnist import input_data
 
-data = input_data.read_data_sets("data/MNIST", one_hot=True)
+data: Datasets = input_data.read_data_sets("data/MNIST", one_hot=True)
 
-img_size = 28
-img_size_flat = img_size * img_size
-img_shape = (img_size, img_size)
-num_classes = 10
+img_size: int = 28
+img_size_flat: int = img_size * img_size
+img_shape: Tuple[int, int] = (img_size, img_size)
+num_classes: int = 10
 
 x = tf.placeholder(tf.float32, [None, img_size_flat])
 y_true = tf.placeholder(tf.float32, [None, num_classes])
 y_true_cls = tf.placeholder(tf.int64, [None])
 
-weight = tf.Variable(tf.zeros([img_size_flat, num_classes]))
-bias = tf.Variable(tf.zeros([num_classes]))
+weight: Variable = tf.Variable(tf.zeros([img_size_flat, num_classes]))
+bias: Variable = tf.Variable(tf.zeros([num_classes]))
 
 logits = tf.matmul(x, weight) + bias
 
@@ -31,7 +34,7 @@ correct_prediction = tf.equal(y_pre_cls, y_true_cls)
 
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-batch_size = 128
+batch_size: int = 128
 
 feed_dict_test = {x: data.test.images,
                   y_true: data.test.labels,
@@ -41,11 +44,11 @@ with tf.Session() as session:
     session.run(tf.global_variables_initializer())
 
 
-    def optimize(num_iterations):
+    def optimize(num_iterations: int):
         for i in range(num_iterations):
             x_batch, y_true_batch = data.train.next_batch(batch_size)
-            feed_dict_train = {x: x_batch,
-                               y_true: y_true_batch}
+            feed_dict_train: dict = {x: x_batch,
+                                     y_true: y_true_batch}
             session.run(optimizer, feed_dict_train)
 
 
