@@ -3,12 +3,14 @@ import tensorflow as tf
 import numpy as np
 import time
 from datetime import timedelta
-
+from os import path, makedirs
 from tensorflow import Variable
 from tensorflow.contrib.learn.python.learn.datasets.base import Datasets
 from tensorflow.examples.tutorials.mnist import input_data
 
 # Convolutional Layer 1.
+from tensorflow.python.training.saver import Saver
+
 filter_size1: int = 5  # Convolution filters are 5 x 5 pixels.
 num_filters1: int = 16  # There are 16 of these filters.
 
@@ -156,6 +158,21 @@ correct_prediction = tf.equal(y_pred_cls, y_true_cls)
 
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
+best_validation_acc: float = 0.0
+
+last_improvement: float = 0.0
+
+require_improvement: int = 1000
+
+saver: Saver = tf.train.Saver()
+
+save_dir = "checkpoints/"
+
+if not path.exists(save_dir):
+    makedirs(save_dir)
+
+save_path = path.join(save_dir, "best_validation")
+
 train_batch_size: int = 64
 
 feed_dict_test: dict = {x: data.test.images,
@@ -170,6 +187,8 @@ with tf.Session() as session:
     def optimize(num_iterations: int):
         # Ensure we update the global variable rather than a local copy.
         global total_iterations
+        global best_validation_acc
+        global last_improvement
 
         start_time: float = time.time()
 
@@ -188,10 +207,19 @@ with tf.Session() as session:
                 # Calculate the accuracy on the training-set.
                 acc = session.run(accuracy, feed_dict=feed_dict_train)
 
+                if acc > best_validation_acc:
+                    best_validation_acc = acc
+                    last_improvement = total_iterations
+                    saver.save(sess=session, save_path=save_path)
+
                 # Message for printing.
                 msg: str = "Optimization Iteration: {0:>6}, Training Accuracy: {1:>6.1%}"
 
                 print(msg.format(i + 1, acc))
+
+                if total_iterations - last_improvement > require_improvement:
+                    print("No improvement found in a while, stopping optimization.")
+                    break
 
         # Update the total number of iterations performed.
         total_iterations += num_iterations
@@ -207,3 +235,5 @@ with tf.Session() as session:
 
     acc = session.run(accuracy, feed_dict_test)
     print("Accuracy on test-set: {0:.1%}".format(acc))
+
+    # saver.restore(sess=session, save_path=save_path)
