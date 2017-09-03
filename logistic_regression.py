@@ -32,10 +32,14 @@ with tf.Session() as session:
     session.run(tf.global_variables_initializer())
 
     for epoch in range(train_epoch):
+        avg_cost: float = 0.0
         total_batch = int(mnist.train.num_examples / batch_size)
         for i in range(total_batch):
             batch_x, batch_y = mnist.train.next_batch(batch_size=batch_size)
-            c = session.run(optimizer, feed_dict={X: batch_x, Y: batch_y})
+            _, c = session.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y})
+            avg_cost = c / total_batch
+
+        print("Epoch :" + str(epoch) + ", loss :" + str(avg_cost))
 
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(Y, 1))
     acc = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
