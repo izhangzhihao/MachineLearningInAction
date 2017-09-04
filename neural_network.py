@@ -26,32 +26,30 @@ def neural_net(x_dict: dict):
 def model_fn(features, labels, mode):
     logits = neural_net(features)
 
-    pred_classes = tf.argmax(logits, axis=1)
+    predictions = tf.argmax(logits, axis=1)
 
-    # If in prediction mode , early return
+    # If in prediction mode, early return
     if mode == tf.estimator.ModeKeys.PREDICT:
-        return tf.estimator.EstimatorSpec(mode, predictions=pred_classes)
+        return tf.estimator.EstimatorSpec(mode, predictions=predictions)
 
-    # Define loss and optimizer
-    loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(
+    # Define loss_op and train_op
+    loss_op = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(
         logits=logits, labels=tf.cast(labels, dtype=tf.int32)
     ))
 
-    optimizer = tf.train \
+    train_op = tf.train \
         .GradientDescentOptimizer(learning_rate=learning_rate) \
-        .minimize(loss, global_step=tf.train.get_global_step())
+        .minimize(loss_op, global_step=tf.train.get_global_step())
 
-    acc = tf.metrics.accuracy(labels=labels, predictions=pred_classes)
+    acc = tf.metrics.accuracy(labels=labels, predictions=predictions)
 
-    estim_specs = tf.estimator.EstimatorSpec(
+    return tf.estimator.EstimatorSpec(
         mode=mode,
-        predictions=pred_classes,
-        loss=loss,
-        train_op=optimizer,
+        predictions=predictions,
+        loss=loss_op,
+        train_op=train_op,
         eval_metric_ops={'accuracy': acc}
     )
-
-    return estim_specs
 
 
 model = tf.estimator.Estimator(model_fn=model_fn, model_dir='./output')
