@@ -28,10 +28,15 @@ biases: dict = {
 
 
 def RNN(x, weights: dict, biases: dict):
+    # Prepare data shape to match `rnn` function requirements
+    # Current data input shape: (batch_size, timesteps, n_input)
+    # Required shape: 'timesteps' tensors list of shape (batch_size, n_input)
+
+    # Unstack to get a list of 'timesteps' tensors of shape (batch_size, n_input)
     x = tf.unstack(x, timesteps, 1)
     lstm_cell = rnn.BasicLSTMCell(num_hidden, forget_bias=1.0)
     outputs, states = rnn.static_rnn(lstm_cell, x, dtype=tf.float32)
-    return tf.matmul(outputs[-1], weights['out'] + biases['out'])
+    return tf.matmul(outputs[-1], weights['out']) + biases['out']
 
 
 logits = RNN(X, weights, biases)
