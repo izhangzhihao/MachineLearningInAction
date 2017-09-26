@@ -43,20 +43,30 @@ def maxpool2d(x, k=2):
 
 
 def conv_net(x, weights, biases, dropout):
-    x = tf.reshape(x, shape=[-1, image_size, image_size, 1])
-    conv1 = conv2d(x, weights['wc1'], biases['bc1'])
-
-    conv1 = maxpool2d(conv1)
-
-    conv2 = conv2d(conv1, weights['wc2'], biases['bc2'])
-
-    conv2 = maxpool2d(conv2)
-
-    fc1 = tf.reshape(conv2, [-1, weights['wd1'].get_shape().as_list()[0]])
-    fc1 = tf.add(tf.matmul(fc1, weights['wd1']), biases['bd1'])
-    fc1 = tf.nn.dropout(fc1, dropout)
-    fc1 = tf.nn.relu(fc1)
-    return tf.add(tf.matmul(fc1, weights['out']), biases['out'])
+    with tf.name_scope('X'):
+        x = tf.reshape(x, shape=[-1, image_size, image_size, 1])
+    with tf.name_scope('Conv1'):
+        conv1 = conv2d(x, weights['wc1'], biases['bc1'])
+        conv1 = maxpool2d(conv1)
+        tf.summary.histogram('wc1/weight', weights['wc1'])
+        tf.summary.histogram('bc1/bias', biases['bc1'])
+    with tf.name_scope('Conv2'):
+        conv2 = conv2d(conv1, weights['wc2'], biases['bc2'])
+        conv2 = maxpool2d(conv2)
+        tf.summary.histogram('wc2/weight', weights['wc2'])
+        tf.summary.histogram('bc2/bias', biases['bc2'])
+    with tf.name_scope('FC1'):
+        fc1 = tf.reshape(conv2, [-1, weights['wd1'].get_shape().as_list()[0]])
+        fc1 = tf.add(tf.matmul(fc1, weights['wd1']), biases['bd1'])
+        fc1 = tf.nn.dropout(fc1, dropout)
+        fc1 = tf.nn.relu(fc1)
+        tf.summary.histogram('fc1/weight', weights['wd1'])
+        tf.summary.histogram('fc1/bias', biases['bd1'])
+    with tf.name_scope('Out'):
+        out = tf.add(tf.matmul(fc1, weights['out']), biases['out'])
+        tf.summary.histogram('out/weight', weights['out'])
+        tf.summary.histogram('out/bias', biases['out'])
+    return out
 
 
 logits = conv_net(X, weights, biases, keep_prob)
@@ -66,6 +76,9 @@ loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
     logits=logits, labels=Y
 ))
 
+with tf.name_scope('loss'):
+    tf.summary.scalar('loss', loss_op)
+
 train_op = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss_op)
 
 correct_pred = tf.equal(tf.argmax(prediction, 1), tf.argmax(Y, 1))
@@ -73,11 +86,17 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 with tf.Session() as session:
     session.run(tf.global_variables_initializer())
+    # export LC_CTYPE="en_US.UTF-8"
+    # export LC_ALL="en_US.UTF-8"
+    # tensorboard --logdir logs
+    merged = tf.summary.merge_all()
+    writer = tf.summary.FileWriter("./logs", session.graph)
 
     for epoch in range(1, train_epoch):
         batch_x, batch_y = mnist.train.next_batch(batch_size)
-        session.run(train_op, feed_dict={
+        summary, accuracy_currut_train = session.run([merged, train_op], feed_dict={
             X: batch_x, Y: batch_y, keep_prob: 0.75})
+        writer.add_summary(summary, epoch)
         if epoch % display_epoch == 0 or epoch == 1:
             loss, acc = session.run([loss_op, accuracy], feed_dict={
                 X: batch_x, Y: batch_y, keep_prob: 0.75})
