@@ -47,23 +47,31 @@ def norm(name, input, size=4):
 def alex_net(input, weights, biases, dropout):
     X = tf.reshape(input, shape=[-1, 28, 28, 1])
 
+    # [None, 28, 28, 64]
     conv1 = conv2d('Conv1', X, weights['wc1'], biases['bc1'])
+    # [None, 14, 14, 64]
     pool1 = dropout_and_max_pool('Pool1', conv1, k=2, dropout=dropout)
     norm1 = norm('Norm1', pool1, size=4)
 
+    # [None, 14, 14, 128]
     conv2 = conv2d('Conv2', norm1, weights['wc2'], biases['bc2'])
+    # [None, 7, 7, 128]
     pool2 = dropout_and_max_pool('Pool2', conv2, k=2, dropout=dropout)
     norm2 = norm('Norm2', pool2, size=4)
 
+    # [None, 7, 7, 256]
     conv3 = conv2d('Conv3', norm2, weights['wc3'], biases['bc3'])
+    # [None, 4, 4, 256]
     pool3 = dropout_and_max_pool('Pool3', conv3, k=2, dropout=dropout)
     norm3 = norm('Norm3', pool3, size=4)
 
+    # [None, 4096]
     dense1 = tf.reshape(norm3, [-1, weights['wd1'].get_shape().as_list()[0]])
+    # [None, 1024]
     dense1 = tf.nn.relu(tf.matmul(dense1, weights['wd1']) + biases['bd1'], name='fc1')
-
+    # [None, 1024]
     dense2 = tf.nn.relu(tf.matmul(dense1, weights['wd2']) + biases['bd2'], name='fc2')
-
+    # [None, 10]
     return tf.matmul(dense2, weights['out']) + biases['out']
 
 
