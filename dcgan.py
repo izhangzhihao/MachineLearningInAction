@@ -136,3 +136,4 @@ with tf.Session() as session:
 
     f.show()
     plt.draw()
+    plt.waitforbuttonpress()
