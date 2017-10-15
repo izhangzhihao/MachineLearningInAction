@@ -2,7 +2,9 @@
 *.out
 .venv
 .ipynb_checkpoints
-data
+MNIST
 checkpoints
 output
 logs
+*.pkl
+model

@@ -12,3 +12,29 @@ Install python in pyenv
 ```
 pyenv install 3.6.2
 ```
+
+...
+
+#### To run char rnn 
+
+train
+```
+python CharRNN/train.py \
+  --use_embedding \
+  --input_file CharRNN/data/poetry.txt \
+  --name poetry \
+  --learning_rate 0.005 \
+  --num_steps 26 \
+  --num_seqs 32 \
+  --max_steps 10000
+```
+
+get sample
+
+```$xslt
+python CharRNN/sample.py \
+  --use_embedding \
+  --converter_path model/poetry/converter.pkl \ 
+  --checkpoint_path model/poetry/ \ 
+  --max_length 300
+```
