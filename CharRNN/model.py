@@ -16,7 +16,8 @@ def pick_top_n(preds, vocab_size, top_n=5):
 # noinspection PyAttributeOutsideInit
 class CharRNN(object):
     def __init__(self, num_classes, num_seqs=64, num_steps=50, lstm_size=128, num_layers=2, learning_rate=0.001,
-                 grad_clip=5, sampling=False, train_keep_prob=0.5, use_embedding=False, embedding_size=128):
+                 grad_clip=5, sampling=False, train_keep_prob=0.5, use_embedding=False, embedding_size=128,
+                 text_converter=None):
         if sampling is True:
             num_seqs, num_steps = 1, 1
         else:
@@ -32,6 +33,7 @@ class CharRNN(object):
         self.train_keep_prob = train_keep_prob
         self.use_embedding = use_embedding
         self.embedding_size = embedding_size
+        self.text_converter = text_converter
 
         tf.reset_default_graph()
         self.build_inputs()
@@ -138,10 +140,18 @@ class CharRNN(object):
                 if step >= max_steps:
                     break
             self.save_checkpoint(save_path, session, step)
+            self.save_meta_data(save_path)
 
     def save_checkpoint(self, save_path, session, step):
         self.saver.save(session, os.path.join(save_path, 'model'), global_step=step)
         print('Checkpoint at step: {0} saved.'.format(str(step)))
+
+    def save_meta_data(self, save_path):
+        if self.text_converter is not None and self.use_embedding:
+            with open(save_path + '/metadata.tsv', 'w') as f:
+                f.write("Index\tWord\n")
+                for index in range(self.text_converter.vocab_size):
+                    f.write("%d\t%s\n" % (index, self.text_converter.int_to_word(index)))
 
     # noinspection PyUnusedLocal
     def sample(self, n_samples, start, vocab_size):
