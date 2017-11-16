@@ -13,6 +13,8 @@ Install python in pyenv
 pyenv install 3.6.2
 ```
 
+install `direnv` :https://github.com/direnv/direnv
+
 ...
 
 #### To run char rnn 
