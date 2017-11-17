@@ -1,9 +1,9 @@
 
 ## Module 2: Classification
 
-- [ ] Naive Bayes classification
-- [ ] K-NN classification
-- [ ] Linear Discriminant Analysis
+- [X] [Naive Bayes classification](https://izhangzhihao.github.io/2017/11/16/朴素贝叶斯分类/)
+- [X] K-NN classification (Skipped)
+- [X] [Linear Discriminant Analysis](https://izhangzhihao.github.io/2017/11/17/主成分分析(PCA)和线性判别分析(LDA)/)
 
 ## Module 3: Regression
 
@@ -81,4 +81,3 @@
 - [ ] Markov random fields
 - [ ] Hidden Markov models
 - [ ] Conditional random field
-
