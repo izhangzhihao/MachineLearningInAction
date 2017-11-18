@@ -7,9 +7,9 @@
 
 ## Module 3: Regression
 
-- [ ] Linear Regression
-- [ ] Logistic Regression
-- [ ] Nonlinear Regression / Polynomial Regression
+- [X] [Linear Regression](https://github.com/izhangzhihao/MachineLearningInAction/blob/master/linear_regression.py)
+- [X] [Logistic Regression](https://github.com/izhangzhihao/MachineLearningInAction/blob/master/logistic_regression.py)
+- [X] [Nonlinear Regression / Polynomial Regression](https://github.com/izhangzhihao/MachineLearningInAction/blob/master/convolutional_network.py)
 
 ## Module 4: Unsupervised learning
 
@@ -41,7 +41,7 @@
 - [ ] Advanced Feature Engineering
 - [ ] Algorithm Selection
 
-## Module 6: Decision Trees 
+## Module 6: Decision Trees
 
 - [ ] Features
 - [ ] Loss function
