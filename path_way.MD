@@ -16,11 +16,11 @@
 - [X] [Principal Component Analysis](https://izhangzhihao.github.io/2017/11/17/主成分分析(PCA)和线性判别分析(LDA)/)
 - [X] [Euclidean distance, edit distance, jaccard distance](https://izhangzhihao.github.io/2017/11/18/范数和距离/)
 - [X] [Cosine similarity](https://izhangzhihao.github.io/2017/11/18/范数和距离/)
-- [ ] Clustering
+- [X] [Clustering](https://izhangzhihao.github.io/2017/11/19/聚类/)
     - [X] K-means clustering
     - [X] Hierarchical clustering
-    - [ ] Spectral clustering
-    - [ ] GMM clustering
+    - [X] Spectral clustering
+    - [X] GMM clustering
 
 ## Module 5: Machine Learning Model Development (intermediate - advanced)
 
