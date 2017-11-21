@@ -25,8 +25,8 @@
 ## Module 5: Machine Learning Model Development (intermediate - advanced)
 
 - [ ] Evaluating machine learning models
-    - [ ] Curse of dimensionality / Occam’s razor
-        - [ ] Vapnik-Chernovenkis (VC) dimension
+    - [X] [Curse of dimensionality / Occam’s razor](https://izhangzhihao.github.io/2017/11/21/维数灾难和奥卡姆剃刀/)
+        - [X] Vapnik-Chernovenkis (VC) dimension
     - [ ] Underfitting and overfitting
     - [ ] Hypothesis testing and Statistical significance
     - [ ] Cross validation
