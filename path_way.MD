@@ -27,7 +27,7 @@
 - [ ] Evaluating machine learning models
     - [X] [Curse of dimensionality / Occam’s razor](https://izhangzhihao.github.io/2017/11/21/维数灾难和奥卡姆剃刀/)
         - [X] Vapnik-Chernovenkis (VC) dimension
-    - [ ] Underfitting and overfitting
+    - [X] [Underfitting and overfitting](https://izhangzhihao.github.io/2017/11/22/欠拟合和过拟合/)
     - [ ] Hypothesis testing and Statistical significance
     - [ ] Cross validation
         - [ ] Leave one-out
