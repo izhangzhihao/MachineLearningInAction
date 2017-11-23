@@ -28,8 +28,8 @@
     - [X] [Curse of dimensionality / Occam’s razor](https://izhangzhihao.github.io/2017/11/21/维数灾难和奥卡姆剃刀/)
         - [X] Vapnik-Chernovenkis (VC) dimension
     - [X] [Underfitting and overfitting](https://izhangzhihao.github.io/2017/11/22/欠拟合和过拟合/)
-    - [ ] Hypothesis testing and Statistical significance
-    - [ ] Cross validation
+    - [X] [Hypothesis testing and Statistical significance](https://izhangzhihao.github.io/2017/11/23/假设检验和显著性差异/)
+    - [X] Cross validation(Skipped)
         - [ ] Leave one-out
         - [ ] K-fold validation
     - [ ] Bootstrap
