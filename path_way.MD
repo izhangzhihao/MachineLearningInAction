@@ -32,12 +32,11 @@
     - [X] Cross validation(Skipped)
         - [ ] Leave one-out
         - [ ] K-fold validation
-    - [ ] Bootstrap
-- [ ] Training error and loss functions
-    - [ ] Absolute loss
-    - [ ] Squared loss
-    - [ ] Zero/one loss
-    - [ ] Cross entropy loss
+- [X] [Training error and loss functions](https://izhangzhihao.github.io/2017/11/25/Ativation-functions-and-loss-functions/)
+    - [X] Absolute loss
+    - [X] Squared loss
+    - [X] Zero/one loss
+    - [X] Cross entropy loss
 - [ ] Advanced Feature Engineering
 - [ ] Algorithm Selection
 
