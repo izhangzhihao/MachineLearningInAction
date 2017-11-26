@@ -37,7 +37,7 @@
     - [X] Squared loss
     - [X] Zero/one loss
     - [X] Cross entropy loss
-- [ ] Advanced Feature Engineering
+- [X] [Advanced Feature Engineering](https://izhangzhihao.github.io/2017/11/26/Advanced-Feature-Engineering/)
 - [ ] Algorithm Selection
 
 ## Module 6: Decision Trees
