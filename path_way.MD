@@ -42,14 +42,14 @@
 
 ## Module 6: Decision Trees
 
-- [ ] Features
-- [ ] Loss function
+- [X] Features
+- [X] [Loss function](https://izhangzhihao.github.io/2017/11/25/Ativation-functions-and-loss-functions/)
 
-## Module 7: Ensemble Learning
+## [Module 7: Ensemble Learning](https://izhangzhihao.github.io/2017/12/03/Ensemble-Learning/)
 
-- [ ] Bagging
-- [ ] Boosting
-- [ ] Random forest
+- [X] Bagging
+- [X] Boosting
+- [X] Random forest
 
 ## Module 8: Support Vector Machines
 
