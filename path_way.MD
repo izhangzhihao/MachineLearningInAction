@@ -51,9 +51,9 @@
 - [X] Boosting
 - [X] Random forest
 
-## Module 8: Support Vector Machines
+## Module 8: [Support Vector Machines](https://izhangzhihao.github.io/2017/12/04/SVM/)
 
-- [ ] Linear SVM
+- [X] Linear SVM
 - [ ] ELM - Extreme Learning Machine
 
 ## Module 9: Perceptrons
