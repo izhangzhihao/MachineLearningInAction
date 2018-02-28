@@ -38,7 +38,7 @@
     - [X] Zero/one loss
     - [X] Cross entropy loss
 - [X] [Advanced Feature Engineering](https://izhangzhihao.github.io/2017/11/26/Advanced-Feature-Engineering/)
-- [ ] Algorithm Selection
+- [ ] Algorithm Selection(Skipped)
 
 ## Module 6: Decision Trees
 
@@ -54,15 +54,15 @@
 ## Module 8: [Support Vector Machines](https://izhangzhihao.github.io/2017/12/04/SVM/)
 
 - [X] Linear SVM
-- [ ] ELM - Extreme Learning Machine
+- [ ] ELM - Extreme Learning Machine(Skipped)
 
-## Module 9: Perceptrons
+## Module 9: Perceptrons(Skipped)
 
 - [ ] Perceptrons
 - [ ] Multi-layer perceptrons
 - [ ] Momentum
 
-## Module 10: Neural Networks
+## Module 10: Neural Networks(Skipped)
 
 - [ ] Back-propagation networks
 - [ ] Multi-layer networks

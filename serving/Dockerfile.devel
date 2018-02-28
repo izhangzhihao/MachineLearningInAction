@@ -1,7 +1,5 @@
 FROM 10.10.5.46:8082/ubuntu:16.04
 
-MAINTAINER Jeremiah Harmsen <jeremiah@google.com>
-
 ADD sources.list /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y \
