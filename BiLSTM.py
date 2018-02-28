@@ -5,15 +5,15 @@ from tensorflow.contrib import rnn
 
 data_sets: Dataset = input_data.read_data_sets('data/MNIST', one_hot=True)
 
-learning_rate: float = 0.001
-training_steps: int = 1000
+learning_rate: float = 0.01
+training_steps: int = 2000
 batch_size: int = 128
 display_step: int = 100
 num_input: int = 28
 timesteps: int = 28
 num_hidden: int = 128
 num_classes: int = 10
-drop_rate: float = 0.5
+drop_rate: float = 0.1
 num_layers: int = 2
 
 X = tf.placeholder(tf.float32, [None, timesteps, num_input])
@@ -58,7 +58,7 @@ def BiLSTM(x, weights: dict, biases: dict):
 logits = BiLSTM(X, weights, biases)
 prediction = tf.nn.softmax(logits)
 
-loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
+loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
     logits=logits, labels=Y
 ))
 
