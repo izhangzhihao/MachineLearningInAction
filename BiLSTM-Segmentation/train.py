@@ -16,9 +16,13 @@ def test_acc(dataset, accuracy, lstm_segmentation):
     _accs = 0.0
     for i in range(batch_num):
         X_batch, y_batch = dataset.next_batch(_batch_size)
-        feed_dict = {lstm_segmentation.X_inputs: X_batch,
-                     lstm_segmentation.y_inputs: y_batch,
-                     lstm_segmentation.lr: 1e-3}
+        feed_dict = {
+            lstm_segmentation.X_inputs: X_batch,
+            lstm_segmentation.y_inputs: y_batch,
+            lstm_segmentation.lr: 1e-3,
+            lstm_segmentation.batch_size: _batch_size,
+            lstm_segmentation.keep_prob: 0.9
+        }
         _acc = lstm_segmentation.session.run(accuracy, feed_dict)
         _accs += _acc
     mean_acc = _accs / batch_num
@@ -30,8 +34,7 @@ def train():
     max_epoch: int = 2
     decay: float = 0.9
     batch_size: int = 128
-    lstm_segmentation = BiLSTMSegmentation(decay=decay, decay_epoch=decay_epoch, max_epoch=max_epoch,
-                                           batch_size=batch_size)
+    lstm_segmentation = BiLSTMSegmentation(decay=decay, decay_epoch=decay_epoch, max_epoch=max_epoch)
     accuracy, cost, train_op = lstm_segmentation.build_model()
     lstm_segmentation.session.run(tf.global_variables_initializer())
     data_train, data_valid, data_test = generate_batch_data()
@@ -50,9 +53,13 @@ def train():
 
         for batch in tqdm(range(tr_batch_num)):
             X_batch, y_batch = data_train.next_batch(batch_size)
-            feed_dict = {lstm_segmentation.X_inputs: X_batch,
-                         lstm_segmentation.y_inputs: y_batch,
-                         lstm_segmentation.lr: _lr}
+            feed_dict = {
+                lstm_segmentation.X_inputs: X_batch,
+                lstm_segmentation.y_inputs: y_batch,
+                lstm_segmentation.lr: _lr,
+                lstm_segmentation.batch_size: batch_size,
+                lstm_segmentation.keep_prob: 0.9
+            }
             _ = lstm_segmentation.session.run(train_op, feed_dict)
             if (batch + 1) % display_batch == 0:
                 _acc, _cost, _ = lstm_segmentation.session.run([accuracy, cost, train_op], feed_dict)

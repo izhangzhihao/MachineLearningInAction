@@ -7,7 +7,7 @@ class BiLSTMSegmentation(object):
     def __init__(self, decay: float = 0.85, decay_epoch: int = 5, max_epoch: int = 10, timestep_size: int = 32,
                  max_len: int = 32, vocab_size: int = 5159,
                  input_size: int = 64, embedding_size: int = 64, class_num: int = 5, hidden_size: int = 128,
-                 layer_num: int = 2, max_grad_norm: float = 5.0, keep_prob: float = 0.9, batch_size: int = 64,
+                 layer_num: int = 2, max_grad_norm: float = 5.0,
                  model_save_path: str = 'data/bi-lstm-segmentation.ckpt'):
         config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
@@ -24,9 +24,15 @@ class BiLSTMSegmentation(object):
         self.hidden_size: int = hidden_size
         self.layer_num: int = layer_num
         self.max_grad_norm: float = max_grad_norm
-        self.keep_prob: float = keep_prob
-        self.batch_size: int = batch_size
         self.model_save_path: str = model_save_path
+
+    def __inputs__(self):
+        with tf.variable_scope('Inputs'):
+            self.X_inputs = tf.placeholder(tf.int32, [None, self.timestep_size])
+            self.y_inputs = tf.placeholder(tf.int32, [None, self.timestep_size])
+            self.lr = tf.placeholder(tf.float32, [])
+            self.batch_size = tf.placeholder(tf.int32, [])
+            self.keep_prob = tf.placeholder(tf.float32, [])
 
     def __embedding__(self):
         with tf.variable_scope('embedding'):
@@ -63,13 +69,8 @@ class BiLSTMSegmentation(object):
             lstm_fw_cell, lstm_bw_cell, inputs, initial_state_fw, initial_state_bw)
         return tf.reshape(tf.concat(outputs, 1), [-1, self.hidden_size * 2])
 
-    def __inputs__(self):
-        with tf.variable_scope('Inputs'):
-            self.X_inputs = tf.placeholder(tf.int32, [None, self.timestep_size])
-            self.y_inputs = tf.placeholder(tf.int32, [None, self.timestep_size])
-            self.lr = tf.placeholder(tf.float32, [])
-
     def __outputs__(self):
+        self.__inputs__()
         bilstm_output = self.__bi_lstm__(self.X_inputs)
 
         with tf.variable_scope('outputs'):
@@ -80,7 +81,6 @@ class BiLSTMSegmentation(object):
     def build_model(self):
         # adding extra statistics to monitor
         # y_inputs.shape = [batch_size, timestep_size]
-        self.__inputs__()
         self.__outputs__()
         correct_prediction = tf.equal(tf.cast(tf.argmax(self.y_pred, 1), tf.int32), tf.reshape(self.y_inputs, [-1]))
         accuracy: float = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
