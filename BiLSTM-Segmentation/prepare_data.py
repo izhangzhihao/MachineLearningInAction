@@ -47,6 +47,14 @@ def split_sentence_into_words_and_tags(sentence: str) -> tuple:
 
 def process_words_and_tags_for_all_sentences() -> None:
     global df_data
+    words, tags = contact_words_tags()
+    df_data = pd.DataFrame({'words': words, 'tags': tags}, index=range(len(words)))
+    df_data['sentence_len'] = df_data['words'].apply(lambda words: len(words))
+    # print(df_data.head(2))
+    # plot_graph()
+
+
+def contact_words_tags():
     words = list()
     tags = list()
     sentences: list = split_sentences()
@@ -58,10 +66,7 @@ def process_words_and_tags_for_all_sentences() -> None:
     print('Length of words is %d' % len(words))
     print('Datas example: ', words[0])
     print('Labels example:', tags[0])
-    df_data = pd.DataFrame({'words': words, 'tags': tags}, index=range(len(words)))
-    df_data['sentence_len'] = df_data['words'].apply(lambda words: len(words))
-    # print(df_data.head(2))
-    # plot_graph()
+    return words, tags
 
 
 def plot_graph() -> None:
