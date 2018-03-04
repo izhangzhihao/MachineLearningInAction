@@ -12,43 +12,44 @@ session = lstm_segmentation.session
 best_model_path = 'model/bi-lstm.ckpt-2'
 tf.train.Saver().restore(session, best_model_path)
 
-# 利用 tags（即状态序列）来统计转移概率
-# 因为状态数比较少，这里用 dict={'I_tI_{t+1}'：p} 来实现
-# A统计状态转移的频数
-A = {
-    'sb': 0,
-    'ss': 0,
-    'be': 0,
-    'bm': 0,
-    'me': 0,
-    'mm': 0,
-    'eb': 0,
-    'es': 0
-}
 
-words, tags = contact_words_tags()
+def transition_probability():
+    # 利用 tags（即状态序列）来统计转移概率
+    # 因为状态数比较少，这里用 dict={'I_tI_{t+1}'：p} 来实现
+    # A统计状态转移的频数
+    A = {
+        'sb': 0,
+        'ss': 0,
+        'be': 0,
+        'bm': 0,
+        'me': 0,
+        'mm': 0,
+        'eb': 0,
+        'es': 0
+    }
+    words, tags = contact_words_tags()
+    # _zy 表示转移概率矩阵
+    _zy = dict()
+    for tag in tags:
+        for t in range(len(tag) - 1):
+            key = tag[t] + tag[t + 1]
+            A[key] += 1.0
+    _zy['sb'] = A['sb'] / (A['sb'] + A['ss'])
+    _zy['ss'] = 1.0 - _zy['sb']
+    _zy['be'] = A['be'] / (A['be'] + A['bm'])
+    _zy['bm'] = 1.0 - _zy['be']
+    _zy['me'] = A['me'] / (A['me'] + A['mm'])
+    _zy['mm'] = 1.0 - _zy['me']
+    _zy['eb'] = A['eb'] / (A['eb'] + A['es'])
+    _zy['es'] = 1.0 - _zy['eb']
+    keys = sorted(_zy.keys())
+    print('the transition probability: ')
+    for key in keys:
+        print(key, _zy[key])
+    return {i: np.log(_zy[i]) for i in _zy.keys()}
 
-# zy 表示转移概率矩阵
-zy = dict()
-for tag in tags:
-    for t in range(len(tag) - 1):
-        key = tag[t] + tag[t + 1]
-        A[key] += 1.0
 
-zy['sb'] = A['sb'] / (A['sb'] + A['ss'])
-zy['ss'] = 1.0 - zy['sb']
-zy['be'] = A['be'] / (A['be'] + A['bm'])
-zy['bm'] = 1.0 - zy['be']
-zy['me'] = A['me'] / (A['me'] + A['mm'])
-zy['mm'] = 1.0 - zy['me']
-zy['eb'] = A['eb'] / (A['eb'] + A['es'])
-zy['es'] = 1.0 - zy['eb']
-keys = sorted(zy.keys())
-print('the transition probability: ')
-for key in keys:
-    print(key, zy[key])
-
-zy = {i: np.log(zy[i]) for i in zy.keys()}
+zy = transition_probability()
 
 X, y, word2id, id2word, tag2id, id2tag = read_data_from_disk()
 

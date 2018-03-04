@@ -5,19 +5,16 @@ class BatchGenerator(object):
     """ Construct a Data generator. The input X, y should be ndarray or list like type.
 
     Example:
-        Data_train = BatchGenerator(X=X_train_all, y=y_train_all, shuffle=False)
-        Data_test = BatchGenerator(X=X_test_all, y=y_test_all, shuffle=False)
-        X = Data_train.X
-        y = Data_train.y
+        >>> Data_train = BatchGenerator(X=X_train_all, y=y_train_all, shuffle=True)
+        >>> Data_test = BatchGenerator(X=X_test_all, y=y_test_all, shuffle=False)
+        >>> X = Data_train.X
+        >>> y = Data_train.y
         or:
-        X_batch, y_batch = Data_train.next_batch(batch_size)
+        >>> X_batch, y_batch = Data_train.next_batch(batch_size)
      """
 
-    def __init__(self, X, y, shuffle=False):
-        if type(X) != np.ndarray:
-            X = np.asarray(X)
-        if type(y) != np.ndarray:
-            y = np.asarray(y)
+    # noinspection PyPep8Naming
+    def __init__(self, X: np.ndarray, y: np.ndarray, shuffle=False):
         self._X = X
         self._y = y
         self._epochs_completed = 0

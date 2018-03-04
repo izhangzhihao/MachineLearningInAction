@@ -93,5 +93,5 @@ class BiLSTMSegmentation(object):
 
         train_op = optimizer.apply_gradients(zip(grads, tvars),
                                              global_step=tf.contrib.framework.get_or_create_global_step())
-        print('Finished creating the bi-lstm model.')
+        print('Finished build the bi-lstm model.')
         return accuracy, cost, train_op

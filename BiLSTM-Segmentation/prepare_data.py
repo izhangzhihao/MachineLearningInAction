@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
+max_len: int = 32
+pkl_file_path = 'data/data.pkl'
+
 
 def clean(s: str) -> str:
     if '“/s' not in s:
@@ -99,9 +102,6 @@ def build_vocab() -> None:
     print('vocab_size={}'.format(vocab_size))
 
 
-max_len: int = 32
-
-
 def sentence_padding(words: list) -> list:
     ids = list(word2id[words])
     if len(ids) >= max_len:
@@ -129,9 +129,6 @@ def padding_words_and_tags() -> None:
     print('Example of X: ', X[0])
     print('Example of tags: ', df_data['tags'].values[0])
     print('Example of y: ', y[0])
-
-
-pkl_file_path = 'data/data.pkl'
 
 
 def save_data_to_disk() -> None:
@@ -171,16 +168,15 @@ def read_data_from_disk() -> tuple:
 
 def generate_batch_data():
     from BatchGenerator import BatchGenerator
-
-    X, y, word2id, id2word, tag2id, id2tag = read_data_from_disk()
-
     from sklearn.model_selection import train_test_split
+
+    X, y, _, _, _, _ = read_data_from_disk()
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
     print(
-        'X_train.shape={}, y_train.shape={}; \nX_valid.shape={}, y_valid.shape={};\nX_test.shape={}, y_test.shape={}'.format(
-            X_train.shape, y_train.shape, X_valid.shape, y_valid.shape, X_test.shape, y_test.shape)
+        'X_train.shape={}, y_train.shape={}; \nX_valid.shape={}, y_valid.shape={};\nX_test.shape={}, y_test.shape={}'
+            .format(X_train.shape, y_train.shape, X_valid.shape, y_valid.shape, X_test.shape, y_test.shape)
     )
 
     data_train = BatchGenerator(X_train, y_train, shuffle=True)
